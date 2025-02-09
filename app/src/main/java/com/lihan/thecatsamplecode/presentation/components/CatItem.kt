@@ -1,10 +1,13 @@
 package com.lihan.thecatsamplecode.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -17,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.lihan.thecatsamplecode.domain.model.Cat
 
 @Composable
@@ -38,13 +42,24 @@ fun CatItem(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
+            SubcomposeAsyncImage(
                 model = cat.url,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentDescription = "Server Image",
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.Fit,
+                success = { state ->
+                    val aspectRatio = state.painter.intrinsicSize.let { size ->
+                        if (size.width > 0 && size.height > 0) size.width / size.height else 1f
+                    }
+                    Image(
+                        painter = state.painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(aspectRatio),
+                        contentScale = ContentScale.Fit
+                    )
+                }
             )
             Text(
                 modifier = Modifier

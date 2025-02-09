@@ -9,9 +9,14 @@ import retrofit2.http.Headers
 
 interface CatAPI {
 
+    companion object {
+        private const val BASE_URL = "https://api.thecatapi.com/v1/"
+        private const val API_KEY = "live_AZuHUn5WyHtd3kRdlsVy1PRCx9GM0DqozcGaGNVGC7ojSgjeTvqHf94aV6u4ZZDw"
+    }
+
     @Headers(
-        "x-api-key: ${BuildConfig.API_KEY}"
+        "x-api-key: $API_KEY"
     )
-    @GET("images/search?limit=20")
+    @GET("${BASE_URL}images/search?limit=20")
     suspend fun getCats(): Response<List<CatDto>>
 }
